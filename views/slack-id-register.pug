@@ -1,0 +1,13 @@
+extends layout
+
+block content
+  form(method="post", action="/slack-id-register").my-3
+    div.form-group
+      input(type="hidden" name="userId" value=user.userid).form-control
+    div.form-group
+      p ユーザー名：#{user.username}
+      input(type="hidden" name="userName" value=user.username).form-control
+    div.form-group
+      label(for="slackId") SlackのID：
+      input(type="text" name="slackId").form-control
+    button(type="submit").btn.btn-info 登録

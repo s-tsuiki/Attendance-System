@@ -1,0 +1,26 @@
+doctype html
+html(lang="ja")
+  head
+    title Lattendance
+    meta(charset="utf-8")
+    meta(name="viewport" content="width=device-width, initial-scale=1")
+    link(href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" rel="stylesheet")
+    link(rel="stylesheet",
+    href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css",
+    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm",
+    crossorigin="anonymous")
+  body
+    nav.navbar.navbar-light.bg-light
+      a(href="/").navbar-brand.nav-link Lattendance
+      ul.navbar-nav
+        if user
+          li.nav-item.dropdown
+            a(data-toggle="dropdown" aria-haspopup="true" aria-expanded="false").nav-link.dropdown-toggle #{user.username}
+            div(aria-labelledby="dropdownMenuButton").dropdown-menu.dropdown-menu-right
+              a(href="/logout").dropdown-item ログアウト
+        else if !login_page
+          li.nav-item
+            a(href="/login").nav-link ログイン
+    div.container
+      block content
+    script(src="/javascripts/bundle.js")
