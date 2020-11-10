@@ -1,0 +1,34 @@
+extends layout
+
+block content
+  h3.my-3 #{schedule.scheduleName}
+  h5.my-3 #{schedule.description}
+  table.table.table-hover
+    tr
+      th 日程
+      each user in users
+        th #{user.username}
+    each date in dates
+      tr
+        td #{date.date}
+        each user in users
+          td 〇
+  - var isMine = parseInt(user.id) === schedule.createdBy
+  if isMine
+    div
+      a(href=`/schedules/${schedule.scheduleId}/edit`).btn.btn-primary.my-3 編集
+    h3 危険な変更
+    button(type="button", data-toggle="modal", data-target="#deleteConfirmation").btn.btn-danger.my-3 削除
+    div(tabindex="-1", role="dialog", aria-labelledby="exampleModalCenterTitle", aria-hidden="true")#deleteConfirmation.modal.fade
+      div(role="document").modal-dialog.modal-dialog-centered
+        div.modal-content
+          div.modal-header
+            h5#exampleModalCenterTitle.modal-title 確認
+            button.close(type="button", data-dismiss="modal", aria-label="Close")
+              span(aria-hidden="true") &times;
+          div.modal-body 本当に削除しますか？
+          div.modal-footer
+            button(type="button", data-dismiss="modal").btn.btn-secondary 戻る
+            form(method="post", action=`/schedules/${schedule.scheduleId}?delete=1`)
+              input(type="hidden" name="_csrf" value!=csrfToken)
+              button(type="submit").btn.btn-danger 削除

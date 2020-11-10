@@ -12,22 +12,21 @@ var GitHubStrategy = require('passport-github2').Strategy;
 var User = require('./models/user');
 var Schedule = require('./models/schedule');
 var Availability = require('./models/availability');
-var Date = require('./models/date');
+var Dates = require('./models/date');
 User.sync().then(() => {
   Schedule.belongsTo(User, {foreignKey: 'createdBy'});
   Schedule.sync();
   Availability.belongsTo(User, {foreignKey: 'userId'});
-  Date.sync().then(() => {
-    Availability.belongsTo(Date, {foreignKey: 'dateId'});
+  Dates.sync().then(() => {
+    Availability.belongsTo(Dates, {foreignKey: 'dateId'});
     Availability.sync();
   });
 });
 
-var github_info = require('./secret_info/github_info');
-var GITHUB_CLIENT_ID = github_info.GITHUB_CLIENT_ID;
-var GITHUB_CLIENT_SECRET = github_info.GITHUB_CLIENT_SECRET;
+var GITHUB_CLIENT_ID = process.env.GITHUB_CLIENT_ID || require('./secret_info/github_info').GITHUB_CLIENT_ID;
+var GITHUB_CLIENT_SECRET = process.env.GITHUB_CLIENT_SECRET || require('./secret_info/github_info').GITHUB_CLIENT_SECRET;
 
-var session_info = require('./secret_info/session_info');
+var session_info = process.env.SESSION_INFO || require('./secret_info/session_info');
 
 passport.serializeUser(function (user, done) {
   done(null, user);
@@ -40,7 +39,7 @@ passport.deserializeUser(function (obj, done) {
 passport.use(new GitHubStrategy({
   clientID: GITHUB_CLIENT_ID,
   clientSecret: GITHUB_CLIENT_SECRET,
-  callbackURL: 'http://localhost:8000/auth/github/callback'
+  callbackURL: process.env.HEROKU_URL ? process.env.HEROKU_URL + 'auth/github/callback' : 'http://localhost:8000/auth/github/callback'
 },
   function (accessToken, refreshToken, profile, done) {
     process.nextTick(function () {
@@ -66,6 +65,7 @@ var indexRouter = require('./routes/index');
 var loginRouter = require('./routes/login');
 var logoutRouter = require('./routes/logout');
 var slackIdRegisterRouter = require('./routes/slack-id-register');
+var schedulesRouter = require('./routes/schedules');
 
 var app = express();
 app.use(helmet());
@@ -88,6 +88,7 @@ app.use('/', indexRouter);
 app.use('/login', loginRouter);
 app.use('/logout', logoutRouter);
 app.use('/slack-id-register', slackIdRegisterRouter);
+app.use('/schedules', schedulesRouter);
 
 app.get('/auth/github',
   passport.authenticate('github', { scope: ['user:email'] }),

@@ -2,7 +2,7 @@
 const loader = require('./sequelize-loader');
 const Sequelize = loader.Sequelize;
 
-const Date = loader.database.define(
+const Dates = loader.database.define(
   'dates',
   {
     dateId: {
@@ -12,12 +12,12 @@ const Date = loader.database.define(
       allowNull: false
     },
     date: {
-      type: Sequelize.DATE,
+      type: Sequelize.STRING,
       allowNull: false
     },
     memo: {
       type: Sequelize.TEXT,
-      alloeNull: true
+      allowNull: true
     },
     scheduleId: {
       type: Sequelize.UUID,
@@ -35,4 +35,4 @@ const Date = loader.database.define(
   }
 );
 
-module.exports = Date;
+module.exports = Dates;

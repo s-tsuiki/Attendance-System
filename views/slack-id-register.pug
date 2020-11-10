@@ -1,13 +1,16 @@
 extends layout
 
 block content
-  form(method="post", action="/slack-id-register").my-3
-    div.form-group
-      input(type="hidden" name="userId" value=user.userid).form-control
-    div.form-group
-      p ユーザー名：#{user.username}
-      input(type="hidden" name="userName" value=user.username).form-control
-    div.form-group
-      label(for="slackId") SlackのID：
-      input(type="text" name="slackId").form-control
-    button(type="submit").btn.btn-info 登録
+  div.card.my-3
+    div.card-body
+      p.text-center SlackのIDが登録されていません。
+      p.text-center SlackのIDを入力し、登録ボタンを押してください。
+      p.text-center SlackのIDは自分のプロフィールを表示し、<br>「その他」→「メンバーIDをコピー」でコピーしたものを貼り付けてください。
+      form(method="post", action="").my-3
+        input(type="hidden" name="_csrf" value!=csrfToken)
+        div.form-group
+          p ユーザー名：#{user.username}
+        div.form-group
+          label(for="slackId") SlackのID：
+          input(type="text" name="slackId").form-control
+        button(type="submit").btn.btn-primary 登録

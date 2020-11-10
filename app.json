@@ -1,0 +1,7 @@
+{
+  "name": "lattendance",
+  "description": "研究室の出席管理ツール（Node.js, Express） ",
+  "logo": "",
+  "keywords": ["node"],
+  "image": "heroku/nodejs"
+}
